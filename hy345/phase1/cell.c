@@ -1,6 +1,6 @@
 
 #include "cell.h"
-
+// read a line from stdin
 char *cell_read_line()
 {
     char *line = NULL;
@@ -23,7 +23,57 @@ char *cell_read_line()
     return line;
 }
 
-int main(int ac, char **av)
+// takes splits it into tokens int the double linked list
+
+
+struct token *list_tokens(struct token *head, char *line) {
+    char *token_str = strtok(line, " \t\n,"); // delimiters: space, tab, newline, comma
+    struct token *current = NULL;
+    struct token *tail = NULL;
+
+    while (token_str != NULL) {
+        // Create a new node
+        struct token *new_node = malloc(sizeof(struct token));
+        if (!new_node) {
+            perror("malloc failed");
+            exit(EXIT_FAILURE);
+        }
+
+        new_node->value = strdup(token_str);
+        new_node->next = NULL;
+        new_node->prev = tail;
+
+        if (tail != NULL)
+            tail->next = new_node;
+        else
+            head = new_node;  // first node
+
+        tail = new_node;
+
+        // Move to next token
+        token_str = strtok(NULL, " \t\n,");
+    }
+
+    return head;
+}
+
+void print_tokens(struct token *head) {
+    struct token *current = head;
+    int i = 0;
+
+    while (current != NULL) {
+        printf("Token %d: %s\n", i, current->value);
+        current = current->next;
+        i++;
+    }
+}
+
+// main function
+
+
+
+
+ int main(int ac, char **av)
 {
 
     char *username;
@@ -50,7 +100,14 @@ int main(int ac, char **av)
         }
 
         line = cell_read_line();
+        print_tokens(list_tokens(NULL, line));
+        free(line);
     }
+
+
 
     return 0;
 }
+
+
+
