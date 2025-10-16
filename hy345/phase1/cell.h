@@ -36,6 +36,5 @@ int count_tokens(struct token *head);
 void print_tokens(struct token *head);
 char *trim_line(char *line);
 struct token *list_tokens(struct token *head , char *line);
-
+void    exec_command(struct token *node, char **array, int count);
 void free_tokens(struct token *head);
-
